@@ -1,9 +1,9 @@
-package it.uniroma3.siw.config;
+package it.uniroma3.java.siw.config;
 
-import it.uniroma3.siw.model.*;
-import it.uniroma3.siw.model.enums.Livello;
-import it.uniroma3.siw.model.enums.Ruolo;
-import it.uniroma3.siw.repository.*;
+import it.uniroma3.java.siw.model.*;
+import it.uniroma3.java.siw.model.enums.Livello;
+import it.uniroma3.java.siw.model.enums.Ruolo;
+import it.uniroma3.java.siw.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;

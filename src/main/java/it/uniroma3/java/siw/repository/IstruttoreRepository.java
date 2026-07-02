@@ -1,6 +1,6 @@
 package it.uniroma3.java.siw.repository;
 
-import it.uniroma3.siw.model.Istruttore;
+import it.uniroma3.java.siw.model.Istruttore;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import java.util.List;

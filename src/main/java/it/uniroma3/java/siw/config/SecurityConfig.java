@@ -1,6 +1,6 @@
-package it.uniroma3.siw.config;
+package it.uniroma3.java.siw.config;
 
-import it.uniroma3.siw.service.CustomUserDetailsService;
+import it.uniroma3.java.siw.service.CustomUserDetailsService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;

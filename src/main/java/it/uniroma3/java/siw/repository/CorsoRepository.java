@@ -1,7 +1,7 @@
 package it.uniroma3.java.siw.repository;
 
-import it.uniroma3.siw.model.Corso;
-import it.uniroma3.siw.model.enums.Livello;
+import it.uniroma3.java.siw.model.Corso;
+import it.uniroma3.java.siw.model.enums.Livello;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
