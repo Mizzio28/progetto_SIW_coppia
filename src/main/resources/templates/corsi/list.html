@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/header :: head('Corsi')}"></head>
+<body>
+
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main class="container">
+
+    <div class="page-header">
+        <h1>Corsi disponibili</h1>
+        <span sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/admin/corsi/new}" class="btn btn-primary">+ Nuovo corso</a>
+        </span>
+    </div>
+
+    <!-- Filtro per livello -->
+    <form th:action="@{/corsi}" method="get" class="filter-form">
+        <label for="livello">Filtra per livello:</label>
+        <select name="livello" id="livello">
+            <option value="">Tutti i livelli</option>
+            <option th:each="liv : ${livelli}"
+                    th:value="${liv}"
+                    th:text="${liv}"
+                    th:selected="${liv == livelloSelezionato}">
+            </option>
+        </select>
+
+        <label for="durataMin">Durata min (min):</label>
+        <input type="number" name="durataMin" id="durataMin" min="0"
+            th:value="${durataMinSelezionata}" />
+
+        <label for="durataMax">Durata max (min):</label>
+        <input type="number" name="durataMax" id="durataMax" min="0"
+            th:value="${durataMaxSelezionata}" />
+
+        <button type="submit" class="btn btn-secondary">Filtra</button>
+        <a th:if="${livelloSelezionato != null or durataMinSelezionata != null or durataMaxSelezionata != null}"
+        th:href="@{/corsi}" class="btn btn-link">Rimuovi filtro</a>
+    </form>
+
+
+    <!-- Nessun corso -->
+    <div th:if="${#lists.isEmpty(corsi)}" class="empty-state">
+        <p>Nessun corso disponibile al momento.</p>
+    </div>
+
+    <!-- Griglia corsi -->
+    <div class="corso-grid" th:unless="${#lists.isEmpty(corsi)}">
+        <div class="corso-card" th:each="corso : ${corsi}">
+            <div class="corso-card-img">
+                <img th:if="${corso.urlImmagine != null}"
+                     th:src="${corso.urlImmagine}"
+                     th:alt="${corso.nome}"
+                     onerror="this.style.display='none'"/>
+                <div th:unless="${corso.urlImmagine != null}" class="img-placeholder">🏋️</div>
+            </div>
+            <div class="corso-card-body">
+                <span class="badge" th:text="${corso.livello}">LIVELLO</span>
+                <h2 th:text="${corso.nome}">Nome corso</h2>
+                <p th:text="${corso.descrizione}" class="corso-descrizione">Descrizione</p>
+                <p th:if="${corso.durataMinuti != null}" class="corso-durata">
+                    ⏱ <span th:text="${corso.durataMinuti}">60</span> minuti
+                </p>
+                <p th:if="${corso.istruttore != null}" class="corso-istruttore">
+                    👨‍🏫 <span th:text="${corso.istruttore.nome + ' ' + corso.istruttore.cognome}">Istruttore</span>
+                </p>
+            </div>
+            <div class="corso-card-footer">
+                <a th:href="@{/corsi/{id}(id=${corso.id})}" class="btn btn-primary">Dettagli</a>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+</body>
+</html>

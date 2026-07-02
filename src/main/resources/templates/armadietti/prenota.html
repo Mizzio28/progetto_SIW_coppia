@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Armadietti')}"></head>
+<body>
+
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main class="container">
+    <h1>Prenota un armadietto</h1>
+
+    <div th:if="${successo}" class="alert alert-success" th:text="${successo}"></div>
+    <div th:if="${errore}"   class="alert alert-error"   th:text="${errore}"></div>
+
+    <div th:if="${prenotazioneAttiva != null}" class="empty-state">
+        <p>Hai già una prenotazione attiva: armadietto n.
+           <strong th:text="${prenotazioneAttiva.armadietto.numero}">1</strong>
+           (<span th:text="${prenotazioneAttiva.armadietto.dimensione}">GRANDE</span>)
+           per <span th:text="${nomiMesi[prenotazioneAttiva.mese - 1] + ' ' + prenotazioneAttiva.anno}">mese</span>.
+        </p>
+        <form th:action="@{/armadietti/annulla}" method="post">
+            <input type="hidden" name="id" th:value="${prenotazioneAttiva.id}"/>
+            <button type="submit" class="btn btn-secondary">Annulla prenotazione</button>
+        </form>
+    </div>
+
+    <form th:if="${prenotazioneAttiva == null}" th:action="@{/armadietti/prenota}" method="post" class="filter-form">
+        <label for="dimensione">Dimensione:</label>
+        <select name="dimensione" id="dimensione">
+            <option th:each="dim : ${dimensioni}" th:value="${dim}" th:text="${dim}"></option>
+        </select>
+
+        <label for="mese">Mese:</label>
+        <select name="mese" id="mese">
+            <option th:each="m : ${mesiDisponibili}" th:value="${m}" th:text="${nomiMesi[m - 1]}"></option>
+        </select>
+
+        <input type="hidden" name="anno" th:value="${anno}"/>
+
+        <button type="submit" class="btn btn-primary">Prenota</button>
+    </form>
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+</body>
+</html>

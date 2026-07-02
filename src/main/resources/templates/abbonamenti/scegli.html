@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Scegli abbonamento')}"></head>
+<body>
+
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main class="container">
+
+    <div class="page-header">
+        <h1>Scegli il tuo abbonamento</h1>
+        <a th:href="@{/profilo}" class="btn btn-link">← Torna al profilo</a>
+    </div>
+
+    <div class="abbonamenti-grid">
+        <div class="abbonamento-card" th:each="abbonamento : ${abbonamenti}">
+            <h2 th:text="${abbonamento.nome}" class="abbonamento-nome">Nome</h2>
+            <p th:text="${abbonamento.descrizione}" class="abbonamento-descrizione">Descrizione</p>
+            <form th:action="@{/abbonamenti/{id}/sottoscrivi(id=${abbonamento.id})}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <button type="submit" class="btn btn-primary">Scegli questo piano</button>
+            </form>
+        </div>
+    </div>
+
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/header :: head(${istruttore.nome + ' ' + istruttore.cognome})}"></head>
+<body>
+
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main class="container">
+
+    <a th:href="@{/istruttori}" class="btn btn-link">← Torna agli istruttori</a>
+
+    <!-- Profilo istruttore -->
+    <section class="istruttore-profile">
+        <div class="istruttore-profile-avatar">
+            <img th:if="${istruttore.urlFoto != null}"
+                 th:src="${istruttore.urlFoto}"
+                 th:alt="${istruttore.nome}"
+                 class="istruttore-foto-xl"
+                 onerror="this.style.display='none'"/>
+            <div th:unless="${istruttore.urlFoto != null}" class="avatar-placeholder-xl">👤</div>
+        </div>
+
+        <div class="istruttore-profile-info">
+            <h1 th:text="${istruttore.nome + ' ' + istruttore.cognome}">Nome Cognome</h1>
+
+            <ul class="istruttore-meta">
+                <li th:if="${istruttore.specializzazione != null}">
+                    <strong>Specializzazione:</strong>
+                    <span th:text="${istruttore.specializzazione}">—</span>
+                </li>
+                <li th:if="${istruttore.anniDiEsperienza != null}">
+                    <strong>Anni di esperienza:</strong>
+                    <span th:text="${istruttore.anniDiEsperienza}">—</span>
+                </li>
+                <li th:if="${istruttore.dataDiNascita != null}">
+                    <strong>Data di nascita:</strong>
+                    <span th:text="${#temporals.format(istruttore.dataDiNascita, 'dd/MM/yyyy')}">—</span>
+                </li>
+            </ul>
+
+            <!-- Azioni admin -->
+            <div sec:authorize="hasRole('ADMIN')" class="corso-actions">
+                <a th:href="@{/admin/istruttori/{id}/edit(id=${istruttore.id})}" class="btn btn-secondary">Modifica</a>
+                <form th:action="@{/admin/istruttori/{id}/delete(id=${istruttore.id})}" method="post"
+                      onsubmit="return confirm('Sei sicuro di voler eliminare questo istruttore?')">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit" class="btn btn-danger">Elimina</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Corsi tenuti -->
+    <section class="corsi-istruttore">
+        <h2>Corsi tenuti</h2>
+
+        <div th:if="${#lists.isEmpty(istruttore.corsi)}" class="empty-state">
+            <p>Questo istruttore non ha ancora corsi assegnati.</p>
+        </div>
+
+        <div class="corso-grid" th:unless="${#lists.isEmpty(istruttore.corsi)}">
+            <div class="corso-card" th:each="corso : ${istruttore.corsi}">
+                <div class="corso-card-img">
+                    <img th:if="${corso.urlImmagine != null}"
+                         th:src="${corso.urlImmagine}"
+                         th:alt="${corso.nome}"
+                         onerror="this.style.display='none'"/>
+                    <div th:unless="${corso.urlImmagine != null}" class="img-placeholder">🏋️</div>
+                </div>
+                <div class="corso-card-body">
+                    <span class="badge" th:text="${corso.livello}">LIVELLO</span>
+                    <h3 th:text="${corso.nome}">Nome corso</h3>
+                    <p th:text="${corso.descrizione}" class="corso-descrizione">Descrizione</p>
+                    <p th:if="${corso.durataMinuti != null}" class="corso-durata">
+                        ⏱ <span th:text="${corso.durataMinuti}">60</span> minuti
+                    </p>
+                </div>
+                <div class="corso-card-footer">
+                    <a th:href="@{/corsi/{id}(id=${corso.id})}" class="btn btn-primary">Dettagli</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+</body>
+</html>

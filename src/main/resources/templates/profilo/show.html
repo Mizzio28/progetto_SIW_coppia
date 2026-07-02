@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Il mio profilo')}"></head>
+<body>
+
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main class="container">
+
+    <h1>Il mio profilo</h1>
+
+    <div th:if="${successo}" class="alert alert-success" th:text="${successo}"></div>
+    <div th:if="${errore}"   class="alert alert-error"   th:text="${errore}"></div>
+
+    <!-- Dati anagrafici -->
+    <section class="profilo-section">
+        <h2>Dati personali</h2>
+        <ul class="profilo-dati">
+            <li><strong>Username:</strong> <span th:text="${utente.username}">username</span></li>
+            <li th:if="${utente.nome != null}">
+                <strong>Nome:</strong> <span th:text="${utente.nome}">Nome</span>
+            </li>
+            <li th:if="${utente.cognome != null}">
+                <strong>Cognome:</strong> <span th:text="${utente.cognome}">Cognome</span>
+            </li>
+            <li th:if="${utente.email != null}">
+                <strong>Email:</strong> <span th:text="${utente.email}">email</span>
+            </li>
+            <li>
+                <strong>Membro dal:</strong>
+                <span th:text="${#temporals.format(utente.dataRegistrazione, 'dd/MM/yyyy')}">data</span>
+            </li>
+        </ul>
+    </section>
+
+    <!-- Abbonamento -->
+    <section class="profilo-section">
+        <h2>Abbonamento</h2>
+
+        <div th:if="${utente.abbonamento == null}" class="empty-state">
+            <p>Non hai ancora un abbonamento attivo.</p>
+            <a th:href="@{/abbonamenti/scegli}" class="btn btn-primary">Sottoscrivi abbonamento</a>
+        </div>
+
+        <div th:unless="${utente.abbonamento == null}" class="abbonamento-card">
+            <div class="abbonamento-header">
+                <span th:text="${utente.abbonamento.nome}" class="abbonamento-nome">Nome</span>
+                <span class="badge badge-attivo">ATTIVO</span>
+            </div>
+            <p th:if="${utente.abbonamento.descrizione != null}"
+               th:text="${utente.abbonamento.descrizione}"
+               class="abbonamento-descrizione">Descrizione</p>
+            <a th:href="@{/abbonamenti/scegli}" class="btn btn-secondary">Cambia abbonamento</a>
+        </div>
+    </section>
+
+    <!-- Iscrizioni ai corsi -->
+    <section class="profilo-section">
+        <h2>I miei corsi</h2>
+
+        <div th:if="${#lists.isEmpty(iscrizioni)}" class="empty-state">
+            <p>Non sei iscritto a nessun corso.</p>
+            <a th:href="@{/corsi}" class="btn btn-primary">Scopri i corsi</a>
+        </div>
+
+        <div class="iscrizioni-list" th:unless="${#lists.isEmpty(iscrizioni)}">
+            <div class="iscrizione-card" th:each="iscrizione : ${iscrizioni}">
+                <div class="iscrizione-info">
+                    <a th:href="@{/corsi/{id}(id=${iscrizione.corso.id})}"
+                       th:text="${iscrizione.corso.nome}"
+                       class="iscrizione-nome">Corso</a>
+                    <span class="badge" th:text="${iscrizione.corso.livello}">LIVELLO</span>
+                </div>
+                <div class="iscrizione-meta">
+                    <span th:text="'Iscritto il ' + ${#temporals.format(iscrizione.dataIscrizione, 'dd/MM/yyyy')}">data</span>
+                    <span class="badge"
+                          th:classappend="${iscrizione.stato.name() == 'ATTIVA'} ? 'badge-attivo' : 'badge-scaduto'"
+                          th:text="${iscrizione.stato}">STATO</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Prenotazione armadietto -->
+     <section class="profilo-section">
+    <h2>Il mio armadietto</h2>
+
+    <div th:if="${prenotazione == null}" class="empty-state">
+        <p>Non hai nessuna prenotazione attiva.</p>
+        <a th:href="@{/armadietti}" class="btn btn-primary">Prenota un armadietto</a>
+    </div>
+
+    <div th:unless="${prenotazione == null}" class="abbonamento-card">
+        <p>Armadietto n. <strong th:text="${prenotazione.armadietto.numero}">1</strong>
+           (<span th:text="${prenotazione.armadietto.dimensione}">GRANDE</span>)</p>
+        <form th:action="@{/armadietti/annulla}" method="post">
+            <input type="hidden" name="id" th:value="${prenotazione.id}"/>
+            <button type="submit" class="btn btn-secondary">Annulla</button>
+        </form>
+    </div>
+</section>
+
+
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/header :: head(${corso.nome})}"></head>
+<body>
+
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main class="container">
+
+    <a th:href="@{/corsi}" class="btn btn-link">← Torna ai corsi</a>
+
+    <!-- Messaggi flash -->
+    <div th:if="${successo}" class="alert alert-success" th:text="${successo}"></div>
+    <div th:if="${errore}"   class="alert alert-error"   th:text="${errore}"></div>
+
+    <!-- Dettaglio corso -->
+    <section class="corso-detail">
+        <div class="corso-detail-header">
+            <span class="badge badge-lg" th:text="${corso.livello}">LIVELLO</span>
+            <h1 th:text="${corso.nome}">Nome corso</h1>
+        </div>
+
+        <div class="corso-detail-body">
+            <div class="corso-detail-info">
+                <img th:if="${corso.urlImmagine != null}"
+                     th:src="${corso.urlImmagine}"
+                     th:alt="${corso.nome}"
+                     class="corso-img"
+                     onerror="this.style.display='none'"/>
+
+                <p th:text="${corso.descrizione}" class="corso-descrizione">Descrizione del corso.</p>
+
+                <ul class="corso-meta">
+                    <li th:if="${corso.durataMinuti != null}">
+                        <strong>Durata:</strong>
+                        <span th:text="${corso.durataMinuti + ' minuti'}">60 minuti</span>
+                    </li>
+                    <li>
+                        <strong>Livello:</strong>
+                        <span th:text="${corso.livello}">PRINCIPIANTE</span>
+                    </li>
+                </ul>
+
+                <!-- Azioni utente autenticato -->
+                <div sec:authorize="isAuthenticated() and !hasRole('ADMIN')" class="corso-actions">
+                    <span th:if="${giaIscritto}">
+                        <span class="badge badge-iscritto">✓ Già iscritto</span>
+                    </span>
+                    <form th:unless="${giaIscritto}"
+                          th:action="@{/corsi/{id}/iscriviti(id=${corso.id})}" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <button type="submit" class="btn btn-primary">Iscriviti al corso</button>
+                    </form>
+                </div>
+
+                <!-- Azioni admin -->
+                <div sec:authorize="hasRole('ADMIN')" class="corso-actions">
+                    <a th:href="@{/admin/corsi/{id}/edit(id=${corso.id})}" class="btn btn-secondary">Modifica</a>
+                    <form th:action="@{/admin/corsi/{id}/delete(id=${corso.id})}" method="post"
+                          onsubmit="return confirm('Sei sicuro di voler eliminare questo corso?')">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <button type="submit" class="btn btn-danger">Elimina</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Scheda istruttore -->
+            <aside class="istruttore-card" th:if="${corso.istruttore != null}">
+                <h3>Istruttore</h3>
+                <img th:if="${corso.istruttore.urlFoto != null}"
+                     th:src="${corso.istruttore.urlFoto}"
+                     th:alt="${corso.istruttore.nome}"
+                     class="istruttore-foto"
+                     onerror="this.style.display='none'"/>
+                <p class="istruttore-nome"
+                   th:text="${corso.istruttore.nome + ' ' + corso.istruttore.cognome}">Nome Cognome</p>
+                <p th:if="${corso.istruttore.specializzazione != null}"
+                   th:text="'Specializzazione: ' + ${corso.istruttore.specializzazione}">Specializzazione</p>
+                <p th:if="${corso.istruttore.anniDiEsperienza != null}"
+                   th:text="${corso.istruttore.anniDiEsperienza + ' anni di esperienza'}">Anni esperienza</p>
+                <a th:href="@{/istruttori/{id}(id=${corso.istruttore.id})}"
+                   class="btn btn-link">Vedi profilo completo →</a>
+            </aside>
+        </div>
+    </section>
+
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/header :: head('Home')}"></head>
+<body>
+
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main class="container">
+
+    <section class="hero">
+        <h1>Benvenuto in SIW Palestra</h1>
+        <p>Scopri i nostri corsi, scegli il tuo istruttore e inizia il tuo percorso fitness.</p>
+        <div class="hero-actions">
+            <a th:href="@{/corsi}" class="btn btn-primary">Esplora i corsi</a>
+            <a th:href="@{/istruttori}" class="btn btn-secondary">Vedi gli istruttori</a>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="feature-card">
+            <h2>🏃 Corsi per tutti i livelli</h2>
+            <p>Principiante, intermedio o avanzato: trovi il corso giusto per te.</p>
+            <a th:href="@{/corsi}">Scopri i corsi →</a>
+        </div>
+        <div class="feature-card">
+            <h2>👨‍🏫 Istruttori qualificati</h2>
+            <p>Il nostro team di professionisti ti guiderà nel tuo allenamento.</p>
+            <a th:href="@{/istruttori}">Conosci gli istruttori →</a>
+        </div>
+        <div class="feature-card">
+            <h2>💳 Abbonamenti flessibili</h2>
+            <p>Mensile, trimestrale o annuale: scegli il piano più adatto.</p>
+            <a th:href="@{/abbonamenti}">Vedi gli abbonamenti →</a>
+        </div>
+    </section>
+
+    <section sec:authorize="!isAuthenticated()" class="cta">
+        <h2>Pronto ad allenarti?</h2>
+        <p>Registrati ora e accedi a tutti i corsi della palestra.</p>
+        <a th:href="@{/register}" class="btn btn-primary">Registrati gratuitamente</a>
+        <a th:href="@{/login}" class="btn btn-secondary">Hai già un account? Accedi</a>
+    </section>
+
+    <section sec:authorize="isAuthenticated()" class="cta">
+        <h2>Bentornato!</h2>
+        <p>Accedi al tuo profilo per gestire le tue iscrizioni.</p>
+        <a th:href="@{/profilo}" class="btn btn-primary">Il mio profilo</a>
+    </section>
+
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+</body>
+</html>

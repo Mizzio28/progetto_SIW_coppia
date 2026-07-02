@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Non trovato')}"></head>
+<body>
+
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main class="container">
+    <div class="empty-state">
+        <h1>Risorsa non trovata</h1>
+        <p th:text="${messaggio}">Messaggio di errore</p>
+        <a th:href="@{/}" class="btn btn-primary">Torna alla home</a>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+</body>
+</html>
+
+

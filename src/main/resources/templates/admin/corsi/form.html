@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head(${corso.id == null ? 'Nuovo Corso' : 'Modifica Corso'})}"></head>
+<body>
+
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main class="container">
+
+    <div class="page-header">
+        <h1 th:text="${corso.id == null ? 'Nuovo corso' : 'Modifica corso'}">Corso</h1>
+        <a th:href="@{/admin/corsi}" class="btn btn-link">← Torna alla lista</a>
+    </div>
+
+    <form th:action="${corso.id == null ? '/admin/corsi' : '/admin/corsi/' + corso.id + '/edit'}"
+          th:object="${corso}"
+          method="post"
+          class="admin-form">
+
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <!-- Nome -->
+        <div class="form-group">
+            <label for="nome">Nome *</label>
+            <input type="text" id="nome" th:field="*{nome}" class="form-control"
+                   th:classappend="${#fields.hasErrors('nome')} ? 'input-error'" required/>
+            <span th:if="${#fields.hasErrors('nome')}" class="error-msg" th:errors="*{nome}"></span>
+        </div>
+
+        <!-- Descrizione -->
+        <div class="form-group">
+            <label for="descrizione">Descrizione</label>
+            <textarea id="descrizione" th:field="*{descrizione}" class="form-control" rows="4"
+                      maxlength="500"></textarea>
+            <span th:if="${#fields.hasErrors('descrizione')}" class="error-msg" th:errors="*{descrizione}"></span>
+        </div>
+
+        <!-- Livello -->
+        <div class="form-group">
+            <label for="livello">Livello *</label>
+            <select id="livello" th:field="*{livello}" class="form-control"
+                    th:classappend="${#fields.hasErrors('livello')} ? 'input-error'" required>
+                <option value="">-- Seleziona livello --</option>
+                <option th:each="liv : ${livelli}"
+                        th:value="${liv}"
+                        th:text="${liv}">
+                </option>
+            </select>
+            <span th:if="${#fields.hasErrors('livello')}" class="error-msg" th:errors="*{livello}"></span>
+        </div>
+
+        <!-- Durata -->
+        <div class="form-group">
+            <label for="durataMinuti">Durata (minuti)</label>
+            <input type="number" id="durataMinuti" th:field="*{durataMinuti}" class="form-control"
+                   min="1"
+                   th:classappend="${#fields.hasErrors('durataMinuti')} ? 'input-error'"/>
+            <span th:if="${#fields.hasErrors('durataMinuti')}" class="error-msg" th:errors="*{durataMinuti}"></span>
+        </div>
+
+        <!-- URL Immagine -->
+        <div class="form-group">
+            <label for="urlImmagine">URL immagine</label>
+            <input type="text" id="urlImmagine" th:field="*{urlImmagine}" class="form-control"/>
+        </div>
+
+        <!-- Istruttore dropdown -->
+        <div class="form-group">
+            <label for="istruttoreId">Istruttore</label>
+            <select id="istruttoreId" name="istruttoreId" class="form-control">
+                <option value="">-- Nessun istruttore --</option>
+                <option th:each="istruttore : ${istruttori}"
+                        th:value="${istruttore.id}"
+                        th:text="${istruttore.nome + ' ' + istruttore.cognome}"
+                        th:selected="${corso.istruttore != null and corso.istruttore.id == istruttore.id}">
+                </option>
+            </select>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary"
+                    th:text="${corso.id == null ? 'Crea corso' : 'Salva modifiche'}">Salva</button>
+            <a th:href="@{/admin/corsi}" class="btn btn-link">Annulla</a>
+        </div>
+
+    </form>
+
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+</body>
+</html>
