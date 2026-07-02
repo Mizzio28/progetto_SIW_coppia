@@ -52,6 +52,9 @@ public class SecurityConfig {
                 .requestMatchers("/istruttori", "/istruttori/**").permitAll()
                 // Abbonamenti — pubblici (sola lettura)
                 .requestMatchers("/abbonamenti", "/abbonamenti/**").permitAll()
+                // API Recensioni — lettura pubblica, scrittura autenticata
+                .requestMatchers(new AntPathRequestMatcher("/api/corsi/*/recensioni", "GET")).permitAll()
+                .requestMatchers("/api/corsi/**").hasAnyRole("USER", "ADMIN")
                 // Pagine di errore — sempre accessibili
                 .requestMatchers("/error/**").permitAll()
                 // Iscrizioni — utenti autenticati
