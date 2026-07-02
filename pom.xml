@@ -93,6 +93,16 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <!-- Mockito/ByteBuddy in Spring Boot 3.2.5 non supporta ufficialmente
+                         le JVM più recenti di Java 22 (es. Java 25); questo flag evita
+                         errori "Byte Buddy could not instrument all classes" con @MockBean. -->
+                    <argLine>-Dnet.bytebuddy.experimental=true</argLine>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
