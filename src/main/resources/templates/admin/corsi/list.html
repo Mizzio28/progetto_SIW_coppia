@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Admin - Corsi')}"></head>
+<body>
+
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main class="container">
+
+    <div class="page-header">
+        <h1>Gestione Corsi</h1>
+        <a th:href="@{/admin/corsi/new}" class="btn btn-primary">+ Nuovo corso</a>
+    </div>
+
+    <div th:if="${successo}" class="alert alert-success" th:text="${successo}"></div>
+    <div th:if="${errore}"   class="alert alert-error"   th:text="${errore}"></div>
+
+    <div th:if="${#lists.isEmpty(corsi)}" class="empty-state">
+        <p>Nessun corso presente.</p>
+    </div>
+
+    <table th:unless="${#lists.isEmpty(corsi)}" class="admin-table">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Livello</th>
+                <th>Istruttore</th>
+                <th>Durata (min)</th>
+                <th>Azioni</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="corso : ${corsi}">
+                <td>
+                    <a th:href="@{/corsi/{id}(id=${corso.id})}" th:text="${corso.nome}">Nome</a>
+                </td>
+                <td th:text="${corso.livello}">LIVELLO</td>
+                <td th:text="${corso.istruttore != null ? corso.istruttore.nome + ' ' + corso.istruttore.cognome : '-'}">-</td>
+                <td th:text="${corso.durataMinuti != null ? corso.durataMinuti : '-'}">-</td>
+                <td class="admin-actions">
+                    <a th:href="@{/admin/corsi/{id}/edit(id=${corso.id})}" class="btn btn-secondary btn-sm">Modifica</a>
+                    <form th:action="@{/admin/corsi/{id}/delete(id=${corso.id})}" method="post"
+                          style="display:inline"
+                          onsubmit="return confirm('Eliminare il corso?')">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <button type="submit" class="btn btn-danger btn-sm">Elimina</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+</body>
+</html>

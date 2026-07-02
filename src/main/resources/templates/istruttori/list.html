@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/header :: head('Istruttori')}"></head>
+<body>
+
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main class="container">
+
+    <div class="page-header">
+        <h1>I nostri istruttori</h1>
+        <span sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/admin/istruttori/new}" class="btn btn-primary">+ Nuovo istruttore</a>
+        </span>
+    </div>
+
+    <div th:if="${#lists.isEmpty(istruttori)}" class="empty-state">
+        <p>Nessun istruttore disponibile al momento.</p>
+    </div>
+
+    <div class="istruttori-grid" th:unless="${#lists.isEmpty(istruttori)}">
+        <div class="istruttore-card-full" th:each="istruttore : ${istruttori}">
+            <div class="istruttore-avatar">
+                <img th:if="${istruttore.urlFoto != null}"
+                     th:src="${istruttore.urlFoto}"
+                     th:alt="${istruttore.nome}"
+                     class="istruttore-foto-lg"
+                     onerror="this.style.display='none'"/>
+                <div th:unless="${istruttore.urlFoto != null}" class="avatar-placeholder">👤</div>
+            </div>
+            <div class="istruttore-card-info">
+                <h2 th:text="${istruttore.nome + ' ' + istruttore.cognome}">Nome Cognome</h2>
+                <p th:if="${istruttore.specializzazione != null}" class="specializzazione"
+                   th:text="${istruttore.specializzazione}">Specializzazione</p>
+                <p th:if="${istruttore.anniDiEsperienza != null}" class="esperienza"
+                   th:text="${istruttore.anniDiEsperienza + ' anni di esperienza'}">Anni</p>
+                <p th:if="${istruttore.dataDiNascita != null}" class="data-nascita"
+                   th:text="'Nato il ' + ${#temporals.format(istruttore.dataDiNascita, 'dd/MM/yyyy')}">Data</p>
+                <p class="num-corsi"
+                   th:text="${#lists.size(istruttore.corsi)} + ' corso/i tenuti'">0 corsi</p>
+            </div>
+            <div class="istruttore-card-actions">
+                <a th:href="@{/istruttori/{id}(id=${istruttore.id})}" class="btn btn-primary">Vedi profilo</a>
+                <span sec:authorize="hasRole('ADMIN')">
+                    <a th:href="@{/admin/istruttori/{id}/edit(id=${istruttore.id})}" class="btn btn-secondary">Modifica</a>
+                </span>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+</body>
+</html>

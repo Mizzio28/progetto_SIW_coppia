@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="${title} + ' — SIW Palestra'">SIW Palestra</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<nav th:fragment="navbar">
+    <div class="navbar">
+        <a class="navbar-brand" th:href="@{/}">🏋️ SIW Palestra</a>
+        <div class="navbar-links">
+            <a th:href="@{/corsi}">Corsi</a>
+            <a th:href="@{/istruttori}">Istruttori</a>
+            <a th:href="@{/abbonamenti}">Abbonamenti</a>
+
+            <span sec:authorize="isAuthenticated()">
+                <a th:href="@{/armadietti}">Armadietti</a>
+                <a th:href="@{/profilo}">Profilo</a>
+                <form th:action="@{/logout}" method="post" style="display:inline;">
+                    <button type="submit" class="btn-link">Logout</button>
+                </form>
+            </span>
+
+            <span sec:authorize="!isAuthenticated()">
+                <a th:href="@{/login}">Login</a>
+                <a th:href="@{/register}">Registrati</a>
+            </span>
+            <span sec:authorize="hasRole('ADMIN')">
+                <a th:href="@{/admin/corsi}">Admin</a>
+            </span>
+        </div>
+    </div>
+</nav>
+
+</body>
+</html>
