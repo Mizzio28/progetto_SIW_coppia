@@ -31,3 +31,12 @@ target/
 
 ### macOS ###
 .DS_Store
+
+### React frontend (build artifacts — regenerati da frontend-maven-plugin) ###
+frontend/node/
+frontend/node_modules/
+frontend/dist/
+src/main/resources/static/react/
+
+### Piano/design doc scratch (subagent-driven-development) ###
+.superpowers/

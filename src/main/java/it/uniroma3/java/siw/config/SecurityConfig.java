@@ -41,7 +41,7 @@ public class SecurityConfig {
             .userDetailsService(customUserDetailsService)
             .authorizeHttpRequests(auth -> auth
                 // Risorse statiche sempre accessibili
-                .requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
+                .requestMatchers("/css/**", "/js/**", "/react/**", "/images/**", "/favicon.ico").permitAll()
                 // Pagine pubbliche di autenticazione
                 .requestMatchers("/", "/login", "/register").permitAll()
                 // UC4: iscriviti a un corso — autenticato (prima della regola pubblica sui corsi)
@@ -52,6 +52,9 @@ public class SecurityConfig {
                 .requestMatchers("/istruttori", "/istruttori/**").permitAll()
                 // Abbonamenti — pubblici (sola lettura)
                 .requestMatchers("/abbonamenti", "/abbonamenti/**").permitAll()
+                // API Recensioni — lettura pubblica, scrittura autenticata
+                .requestMatchers(new AntPathRequestMatcher("/api/corsi/*/recensioni", "GET")).permitAll()
+                .requestMatchers("/api/corsi/**").hasAnyRole("USER", "ADMIN")
                 // Pagine di errore — sempre accessibili
                 .requestMatchers("/error/**").permitAll()
                 // Iscrizioni — utenti autenticati

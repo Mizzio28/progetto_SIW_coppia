@@ -6,6 +6,9 @@
 
 <nav th:replace="~{fragments/header :: navbar}"></nav>
 
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
 <main class="container">
 
     <a th:href="@{/corsi}" class="btn btn-link">← Torna ai corsi</a>
@@ -83,6 +86,15 @@
                    class="btn btn-link">Vedi profilo completo →</a>
             </aside>
         </div>
+    </section>
+
+    <section class="recensioni-section">
+        <div id="recensioni-root"
+             th:attr="data-corso-id=${corso.id},
+                      data-username=${#authorization.expression('isAuthenticated()') ? #authentication.name : ''},
+                      data-admin=${#authorization.expression('hasRole(''ADMIN'')')}">
+        </div>
+        <script src="/react/recensioni/recensioni.js"></script>
     </section>
 
 </main>
