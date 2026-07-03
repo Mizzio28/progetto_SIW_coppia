@@ -41,7 +41,7 @@ public class SecurityConfig {
             .userDetailsService(customUserDetailsService)
             .authorizeHttpRequests(auth -> auth
                 // Risorse statiche sempre accessibili
-                .requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
+                .requestMatchers("/css/**", "/js/**", "/react/**", "/images/**", "/favicon.ico").permitAll()
                 // Pagine pubbliche di autenticazione
                 .requestMatchers("/", "/login", "/register").permitAll()
                 // UC4: iscriviti a un corso — autenticato (prima della regola pubblica sui corsi)

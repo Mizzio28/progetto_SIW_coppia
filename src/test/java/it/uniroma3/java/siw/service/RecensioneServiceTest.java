@@ -90,7 +90,7 @@ class RecensioneServiceTest {
 
     @Test
     void modifica_lanciaEccezione_seRecensioneNonTrovata() {
-        when(recensioneRepository.findById(99L)).thenReturn(Optional.empty());
+        when(recensioneRepository.findByIdWithUtente(99L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> recensioneService.modifica(99L, utente, 3, "x"))
                 .isInstanceOf(IllegalArgumentException.class);
@@ -101,7 +101,7 @@ class RecensioneServiceTest {
         Recensione esistente = new Recensione();
         esistente.setId(5L);
         esistente.setUtente(utente);
-        when(recensioneRepository.findById(5L)).thenReturn(Optional.of(esistente));
+        when(recensioneRepository.findByIdWithUtente(5L)).thenReturn(Optional.of(esistente));
 
         assertThatThrownBy(() -> recensioneService.modifica(5L, altroUtente, 3, "x"))
                 .isInstanceOf(SecurityException.class);
@@ -116,7 +116,7 @@ class RecensioneServiceTest {
         esistente.setUtente(utente);
         esistente.setVoto(2);
         esistente.setTesto("vecchio");
-        when(recensioneRepository.findById(5L)).thenReturn(Optional.of(esistente));
+        when(recensioneRepository.findByIdWithUtente(5L)).thenReturn(Optional.of(esistente));
         when(recensioneRepository.save(any(Recensione.class))).thenAnswer(inv -> inv.getArgument(0));
 
         Recensione risultato = recensioneService.modifica(5L, utente, 5, "nuovo");

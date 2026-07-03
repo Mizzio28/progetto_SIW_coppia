@@ -55,7 +55,7 @@ public class RecensioneService {
 
     @Transactional
     public Recensione modifica(Long id, Utente utenteCorrente, Integer voto, String testo) {
-        Recensione recensione = recensioneRepository.findById(id)
+        Recensione recensione = recensioneRepository.findByIdWithUtente(id)
                 .orElseThrow(() -> new IllegalArgumentException("Recensione non trovata con id: " + id));
         if (!recensione.getUtente().getId().equals(utenteCorrente.getId())) {
             throw new SecurityException("Non puoi modificare la recensione di un altro utente");
@@ -67,7 +67,7 @@ public class RecensioneService {
 
     @Transactional
     public void elimina(Long id, Utente utenteCorrente) {
-        Recensione recensione = recensioneRepository.findById(id)
+        Recensione recensione = recensioneRepository.findByIdWithUtente(id)
                 .orElseThrow(() -> new IllegalArgumentException("Recensione non trovata con id: " + id));
         boolean isAutore = recensione.getUtente().getId().equals(utenteCorrente.getId());
         boolean isAdmin = utenteCorrente.getRuolo() == Ruolo.ADMIN;

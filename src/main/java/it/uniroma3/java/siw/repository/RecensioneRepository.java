@@ -12,7 +12,11 @@ import java.util.Optional;
 
 public interface RecensioneRepository extends CrudRepository<Recensione, Long> {
 
-    List<Recensione> findByCorsoOrderByDataCreazioneDesc(Corso corso);
+    @Query("SELECT r FROM Recensione r JOIN FETCH r.utente WHERE r.corso = :corso ORDER BY r.dataCreazione DESC")
+    List<Recensione> findByCorsoOrderByDataCreazioneDesc(@Param("corso") Corso corso);
+
+    @Query("SELECT r FROM Recensione r JOIN FETCH r.utente WHERE r.id = :id")
+    Optional<Recensione> findByIdWithUtente(@Param("id") Long id);
 
     Optional<Recensione> findByUtenteAndCorso(Utente utente, Corso corso);
 
