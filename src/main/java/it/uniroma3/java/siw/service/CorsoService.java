@@ -67,4 +67,10 @@ public class CorsoService {
     public List<Corso> findByFiltri(Livello livello, Integer durataMin, Integer durataMax) {
         return corsoRepository.findByFiltri(livello, durataMin, durataMax);
     }
+
+    //Contatore di corsi
+    //@Transactional(readOnly = true)
+    //public long count() {
+    //    return corsoRepository.count();
+    //}
 }

@@ -107,4 +107,9 @@ public class UtenteService {
         }
         utenteRepository.deleteById(id);
     }
+
+    @Transactional(readOnly = true)
+    public long count() {
+        return utenteRepository.count();    
+    }
 }

@@ -38,6 +38,10 @@
     <section sec:authorize="!isAuthenticated()" class="cta">
         <h2>Pronto ad allenarti?</h2>
         <p>Registrati ora e accedi a tutti i corsi della palestra.</p>
+        <p class="stats-line">
+            <!-- <strong th:text="${numeroCorsi}">0</strong> corsi disponibili -->
+            <strong th:text="${numeroUtenti}">0</strong> utenti registrati
+        </p>
         <a th:href="@{/register}" class="btn btn-primary">Registrati gratuitamente</a>
         <a th:href="@{/login}" class="btn btn-secondary">Hai già un account? Accedi</a>
     </section>
