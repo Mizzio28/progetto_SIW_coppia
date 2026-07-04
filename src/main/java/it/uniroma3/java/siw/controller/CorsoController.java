@@ -32,18 +32,18 @@ public class CorsoController {
     private UtenteService utenteService;
 
    @GetMapping
-public String lista(@RequestParam(required = false) Livello livello,
-                    @RequestParam(required = false) Integer durataMin,
-                    @RequestParam(required = false) Integer durataMax,
-                    Model model) {
-    List<Corso> corsi = corsoService.findByFiltri(livello, durataMin, durataMax);
-    model.addAttribute("corsi", corsi);
-    model.addAttribute("livelli", Livello.values());
-    model.addAttribute("livelloSelezionato", livello);
-    model.addAttribute("durataMinSelezionata", durataMin);
-    model.addAttribute("durataMaxSelezionata", durataMax);
-    return "corsi/list";
-}
+    public String lista(@RequestParam(required = false) Livello livello,
+                        @RequestParam(required = false) Integer durataMin,
+                        @RequestParam(required = false) Integer durataMax,
+                        Model model) {
+        List<Corso> corsi = corsoService.findByFiltri(livello, durataMin, durataMax);
+        model.addAttribute("corsi", corsi);
+        model.addAttribute("livelli", Livello.values());
+        model.addAttribute("livelloSelezionato", livello);
+        model.addAttribute("durataMinSelezionata", durataMin);
+        model.addAttribute("durataMaxSelezionata", durataMax);
+        return "corsi/list";
+    }
 
 
     @GetMapping("/{id}")
